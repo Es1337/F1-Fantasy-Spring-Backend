@@ -26,10 +26,10 @@ public class User {
     private String pass;
     private boolean adminPrivileges;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Ranking> rankings;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<UserPrediction> userPredictions;
 
     public User() {

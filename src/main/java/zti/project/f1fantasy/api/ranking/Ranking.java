@@ -7,18 +7,17 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "ranking")
+@IdClass(UserRankingId.class)
 public class Ranking {
-    @EmbeddedId
-    private UserRankingKey id;
 
-    @ManyToOne
-    @MapsId("userId")
-    @JoinColumn(name = "user_id", nullable = false)
+    @Id
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne
-    @MapsId("seasonId")
-    @JoinColumn(name = "season_id", nullable = false)
+    @Id
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "season_id", referencedColumnName = "id")
     private Season season;
 
     private Integer points;
@@ -36,21 +35,6 @@ public class Ranking {
         this.user = user;
         this.season = season;
         this.points = points;
-    }
-
-    public Ranking(UserRankingKey id, User user, Season season, Integer points) {
-        this.id = id;
-        this.user = user;
-        this.season = season;
-        this.points = points;
-    }
-
-    public UserRankingKey getId() {
-        return id;
-    }
-
-    public void setId(UserRankingKey id) {
-        this.id = id;
     }
 
     public User getUser() {

@@ -1,5 +1,6 @@
 package zti.project.f1fantasy.api.race;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import zti.project.f1fantasy.api.raceresult.RaceResult;
 import zti.project.f1fantasy.api.season.Season;
 import zti.project.f1fantasy.api.userprediction.UserPrediction;
@@ -26,21 +27,27 @@ public class Race {
     private String country;
     private String city;
     private String track;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fp1;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fp2;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fp3;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime quali;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime sprint;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime race;
 
     @ManyToOne
     @JoinColumn(name = "season_id", nullable = false)
     private Season season;
 
-    @OneToMany(mappedBy = "race")
+    @OneToMany(mappedBy = "race", cascade = CascadeType.ALL)
     private Set<RaceResult> raceResults;
 
-    @OneToMany(mappedBy = "race")
+    @OneToMany(mappedBy = "race", cascade = CascadeType.ALL)
     private Set<UserPrediction> userPredictions;
 
     public Race() {

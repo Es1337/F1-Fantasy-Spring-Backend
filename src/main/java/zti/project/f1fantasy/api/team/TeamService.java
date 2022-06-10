@@ -30,11 +30,11 @@ public class TeamService {
         return teamRepository.findByName(teamName);
     }
 
-    public Team addTeam(String name, Integer points, Long seasonId){
+    public Team addTeam(Team team, Long seasonId){
         Season season = seasonService.getSeasonById(seasonId);
-        Team newTeam = new Team(name, points, season);
+        team.setSeason(season);
 
-        return teamRepository.save(newTeam);
+        return teamRepository.save(team);
     }
 
     public Team updateTeamById(Team newTeam, Long oldTeamId) {

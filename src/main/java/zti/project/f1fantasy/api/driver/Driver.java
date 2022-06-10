@@ -33,7 +33,7 @@ public class Driver {
     @JoinColumn(name="team_id", nullable = false)
     private Team team;
 
-    @OneToMany(mappedBy = "driver")
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private Set<RaceResult> raceResults;
 
     public Driver() {

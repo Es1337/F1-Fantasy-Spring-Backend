@@ -28,7 +28,7 @@ public class Team {
     @JoinColumn(name="season_id", nullable = false)
     private Season season;
 
-    @OneToMany(mappedBy = "season")
+    @OneToMany(mappedBy = "season", cascade = CascadeType.ALL)
     private Set<Driver> drivers;
 
     public Team() {

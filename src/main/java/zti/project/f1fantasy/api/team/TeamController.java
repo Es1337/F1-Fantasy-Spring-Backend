@@ -30,9 +30,9 @@ public class TeamController {
         return teamService.getTeamByName(teamName);
     }
 
-    @PostMapping
-    public Team postTeam(@RequestParam String name, @RequestParam Integer points, @RequestParam Long seasonId){
-        return teamService.addTeam(name, points, seasonId);
+    @PostMapping(path = "{seasonId}")
+    public Team postTeam(@RequestBody Team team, @PathVariable Long seasonId){
+        return teamService.addTeam(team, seasonId);
     }
 
     @PutMapping(path = "{oldTeamId}")
