@@ -43,7 +43,7 @@ public class F1fantasyApplication {
 		return () -> {
 			List<User> admin = userRepository.findByEmail("admin");
 			if(admin.size() < 1)
-				userRepository.save(new User("admin", "admin", true));
+				userRepository.save(new User("admin", new BCryptPasswordEncoder().encode("admin"), true));
 		};
 	}
 

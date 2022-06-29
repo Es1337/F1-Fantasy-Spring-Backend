@@ -36,7 +36,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .httpBasic();
 
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/login/**", "/api/user/token/refresh/**").permitAll();
+        http.authorizeRequests().antMatchers("/login", "/api/user/token/refresh/**").permitAll();
         http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority("USER", "ADMIN");
         http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
