@@ -1,0 +1,12 @@
+{
+    "name": "FORMULA 1 ROLEX GROSSER PREIS VON ÖSTERREICH",
+    "country": "Austria",
+    "city": "Spielberg",
+    "track": "Red Bull Ring",
+    "fp2": "yyyy-MM-dd HH:mm:ss",
+    "fp1": "yyyy-MM-dd HH:mm:ss",
+    "fp3": "yyyy-MM-dd HH:mm:ss",
+    "quali": "yyyy-MM-dd HH:mm:ss",
+    "sprint": "yyyy-MM-dd HH:mm:ss",
+    "race": "yyyy-MM-dd HH:mm:ss"
+}
