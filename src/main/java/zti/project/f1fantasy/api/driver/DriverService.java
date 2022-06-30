@@ -7,6 +7,7 @@ import zti.project.f1fantasy.api.season.SeasonService;
 import zti.project.f1fantasy.api.team.Team;
 import zti.project.f1fantasy.api.team.TeamService;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -38,6 +39,10 @@ public class DriverService {
         return driverRepository.findBySeasonId(seasonId);
     }
 
+    public List<Driver> getDriversFromTeamFromSeason(Long teamId, Long seasonId) {
+        return driverRepository.findByTeamIdAndSeasonId(teamId, seasonId);
+    }
+
     public List<Driver> getDriversByFname(String fname) {
         return driverRepository.findByFname(fname);
     }
@@ -48,6 +53,26 @@ public class DriverService {
 
     public List<Driver> getDriversByFullName(String fname, String lname) {
         return driverRepository.findByFnameAndLname(fname, lname);
+    }
+
+    public List<Driver> getDriversByFullName(String fullName) {
+        String[] splitName = fullName.split(" ");
+        String fname = splitName[0];
+        StringBuilder lnameBuilder = new StringBuilder();
+        for(String s : Arrays.copyOfRange(splitName, 1, splitName.length))
+            lnameBuilder.append(s);
+
+        return driverRepository.findByFnameAndLname(fname, lnameBuilder.toString());
+    }
+
+    public List<Driver> getDriversByFullNameFromSeason(String fullName, Long seasonId) {
+        String[] splitName = fullName.split(" ");
+        String fname = splitName[0];
+        StringBuilder lnameBuilder = new StringBuilder();
+        for(String s : Arrays.copyOfRange(splitName, 1, splitName.length))
+            lnameBuilder.append(s);
+
+        return driverRepository.findByFnameAndLnameAndSeasonId(fname, lnameBuilder.toString(), seasonId);
     }
 
     public Driver addDriver(Driver driver, Long teamId, Long seasonId) {
@@ -74,7 +99,7 @@ public class DriverService {
     }
 
     public void deleteDriverById(Long driverId){
-        Driver driverToDelete = driverRepository.findById(driverId).get();
+        Driver driverToDelete = driverRepository.findById(driverId).orElseThrow(() -> new DriverNotFoundException(driverId));
         driverRepository.delete(driverToDelete)
 
         ;

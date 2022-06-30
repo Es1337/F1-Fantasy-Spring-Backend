@@ -43,14 +43,21 @@ public class RankingService {
     }
 
     public Ranking updateRankingById(Ranking newRanking, Long userId, Long seasonId){
-        Ranking ranking = rankingRepository.findByUserIdAndSeasonId(userId, seasonId).get();
+        Ranking ranking = rankingRepository.findByUserIdAndSeasonId(userId, seasonId).orElseThrow(() -> new UserRankingNotFoundException(seasonId, userId));
         ranking.setPoints(newRanking.getPoints());
 
         return rankingRepository.save(ranking);
     }
 
+    public Ranking updatePointsById(Integer points, Long userId, Long seasonId){
+        Ranking ranking = rankingRepository.findByUserIdAndSeasonId(userId, seasonId).orElseThrow(() -> new UserRankingNotFoundException(seasonId, userId));
+        ranking.setPoints(points);
+
+        return rankingRepository.save(ranking);
+    }
+
     public void deleteRankingById(Long userId, Long seasonId){
-        Ranking rankingToDelete = rankingRepository.findByUserIdAndSeasonId(userId, seasonId).get();
+        Ranking rankingToDelete = rankingRepository.findByUserIdAndSeasonId(userId, seasonId).orElseThrow(() -> new UserRankingNotFoundException(seasonId, userId));
         rankingRepository.delete(rankingToDelete);
     }
 }

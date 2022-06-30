@@ -48,6 +48,10 @@ public class UserPredictionsService {
         return userPredictionRepository.findByAvailablePredictionIdAndRaceIdAndUserId(availablePredictionId, raceId, userId);
     }
 
+    public List<UserPrediction> getPredictionsFromRace(Long raceId) {
+        return userPredictionRepository.findByRaceId(raceId);
+    }
+
     public UserPrediction addUserPrediction(UserPrediction prediction,
                                             Long availablePredictionId,
                                             Long raceId,
@@ -76,7 +80,7 @@ public class UserPredictionsService {
     }
 
     public void deleteUserPredictionById(Long predictionId){
-        UserPrediction predictionToDelete = userPredictionRepository.findById(predictionId).get();
+        UserPrediction predictionToDelete = userPredictionRepository.findById(predictionId).orElseThrow(() -> new UserPredictionNotFoundException(predictionId));
         userPredictionRepository.delete(predictionToDelete);
     }
 }

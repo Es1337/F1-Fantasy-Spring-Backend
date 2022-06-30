@@ -7,6 +7,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import zti.project.f1fantasy.api.ranking.Ranking;
+import zti.project.f1fantasy.api.ranking.RankingRepository;
+//import zti.project.f1fantasy.api.ranking.RankingService;
+import zti.project.f1fantasy.api.season.SeasonService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,11 +19,17 @@ import java.util.List;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+//    private final RankingService rankingService;
+    private final RankingRepository rankingRepository;
+    private final SeasonService seasonService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RankingRepository rankingRepository, SeasonService seasonService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.rankingRepository = rankingRepository;
+//        this.rankingService = rankingService;
+        this.seasonService = seasonService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -41,7 +51,16 @@ public class UserService implements UserDetailsService {
 
     public User addUser(User user){
         user.setPass(passwordEncoder.encode(user.getPass()));
-        return userRepository.save(user);
+
+        Ranking newRanking = new Ranking();
+        User result = userRepository.save(user);
+        newRanking.setUser(result);
+        newRanking.setSeason(seasonService.getSeasonById(seasonService.getCurrentSeasonId()));
+        newRanking.setPoints(0);
+        rankingRepository.save(newRanking);
+//        rankingService.addRanking(newRanking, user.getId(), seasonService.getCurrentSeasonId());
+
+        return result;
     }
 
     public User updateUserById(User newUser, Long oldUserId){
@@ -60,7 +79,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteUserById(Long userId){
-        User userToDelete = userRepository.findById(userId).get();
+        User userToDelete = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         userRepository.delete(userToDelete);
     }
 

@@ -38,6 +38,10 @@ public class RaceResultService {
         return raceResultRepository.findByRaceId(raceId);
     }
 
+    public List<RaceResult> getResultsFromRaceForDriver(Long raceId, Long driverId){
+        return raceResultRepository.findByRaceIdAndDriverId(raceId, driverId);
+    }
+
     public RaceResult addResult(RaceResult result, Long driverId, Long raceId){
         Driver driver = driverService.getDriverById(driverId);
         Race race = raceService.getRaceById(raceId);
@@ -63,7 +67,7 @@ public class RaceResultService {
     }
 
     public void deleteResultById(Long resultId){
-        RaceResult resultToDelete = raceResultRepository.findById(resultId).get();
+        RaceResult resultToDelete = raceResultRepository.findById(resultId).orElseThrow(() -> new RaceResultNotFoundException(resultId));
         raceResultRepository.delete(resultToDelete);
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 @Repository
 public interface UserPredictionRepository extends JpaRepository<UserPrediction, Long> {
-    public List<UserPrediction> findByAvailablePredictionIdAndRaceIdAndUserId(Long availablePredictionId, Long raceId, Long userId);
-    public List<UserPrediction> findByRaceIdAndUserId(Long raceId, Long userId);
+    List<UserPrediction> findByAvailablePredictionIdAndRaceIdAndUserId(Long availablePredictionId, Long raceId, Long userId);
+    List<UserPrediction> findByRaceIdAndUserId(Long raceId, Long userId);
+    List<UserPrediction> findByRaceId(Long raceId);
 }

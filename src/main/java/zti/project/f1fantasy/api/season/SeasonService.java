@@ -4,14 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class SeasonService {
     private final SeasonRepository seasonRepository;
 
+    private Long currentSeasonId = 1L;
+
     @Autowired
     public SeasonService(SeasonRepository seasonRepository) {
         this.seasonRepository = seasonRepository;
+    }
+
+    public Long getCurrentSeasonId() {
+        return currentSeasonId;
     }
 
     public List<Season> getSeasons(){
@@ -35,6 +42,12 @@ public class SeasonService {
     }
 
     public Season addSeason(Season season){
+        Integer maxYear = seasonRepository.findAll().stream()
+                .mapToInt(Season::getYear)
+                .max()
+                .orElseThrow(NoSuchElementException::new);
+        currentSeasonId = seasonRepository.findByYear(maxYear).get(0).getId();
+
         return seasonRepository.save(season);
     }
 
@@ -52,7 +65,7 @@ public class SeasonService {
     }
 
     public void deleteSeasonById(Long seasonId){
-        Season seasonToDelete = seasonRepository.findById(seasonId).get();
+        Season seasonToDelete = seasonRepository.findById(seasonId).orElseThrow(() -> new SeasonNotFoundException(seasonId));
         seasonRepository.delete(seasonToDelete);
     }
 }

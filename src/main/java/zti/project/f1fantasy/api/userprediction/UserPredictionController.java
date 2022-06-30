@@ -48,10 +48,10 @@ public class UserPredictionController {
     @PutMapping(path = "{oldPredictionId}")
     public UserPrediction updatePredictionById(@RequestBody UserPrediction newPrediction,
                                                @PathVariable Long oldPredictionId){
-        return updatePredictionById(newPrediction, oldPredictionId);
+        return userPredictionsService.updateUserPredictionById(newPrediction, oldPredictionId);
     }
 
-    @DeleteMapping(path = "predictionId")
+    @DeleteMapping(path = "{predictionId}")
     public void deletePredictionById(@PathVariable Long predictionId){
         userPredictionsService.deleteUserPredictionById(predictionId);
     }
