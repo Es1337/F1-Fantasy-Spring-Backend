@@ -53,7 +53,7 @@ public class UserController {
         return userService.getAdmins();
     }
 
-    @PostMapping
+    @PostMapping(path = "register")
     public User postUser(@RequestBody User user){
         return userService.addUser(user);
     }
