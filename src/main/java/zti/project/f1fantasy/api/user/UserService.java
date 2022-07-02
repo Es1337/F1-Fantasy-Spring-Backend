@@ -50,13 +50,14 @@ public class UserService implements UserDetailsService {
     }
 
     public User addUser(User user){
-        if(userRepository.findByEmail(user.getEmail()).size() > 0)
+        if(userRepository.findByEmail( user.getEmail() ).size() > 0)
             return new User();
 
         user.setPass(passwordEncoder.encode(user.getPass()));
         user.setAdminPrivileges(false);
-        Ranking newRanking = new Ranking();
         User result = userRepository.save(user);
+
+        Ranking newRanking = new Ranking();
         newRanking.setUser(result);
         newRanking.setSeason(seasonService.getSeasonById(seasonService.getCurrentSeasonId()));
         newRanking.setPoints(0);
