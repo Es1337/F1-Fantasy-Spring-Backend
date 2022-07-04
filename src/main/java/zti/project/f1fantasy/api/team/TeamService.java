@@ -30,6 +30,10 @@ public class TeamService {
         return teamRepository.findByName(teamName);
     }
 
+    public List<Team> getTeamsFromSeason(Long seasonId) {
+        return teamRepository.findBySeasonId(seasonId);
+    }
+
     public Team addTeam(Team team, Long seasonId){
         Season season = seasonService.getSeasonById(seasonId);
         team.setSeason(season);

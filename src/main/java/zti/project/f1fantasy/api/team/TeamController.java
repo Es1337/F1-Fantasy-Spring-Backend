@@ -25,6 +25,11 @@ public class TeamController {
         return teamService.getTeamById(teamId);
     }
 
+    @GetMapping(path = "season/{seasonId}")
+    public List<Team> getTeamsFromSeason(@PathVariable Long seasonId) {
+        return teamService.getTeamsFromSeason(seasonId);
+    }
+
     @GetMapping(path = "name/{teamName}")
     public List<Team> getTeamByName(@PathVariable String teamName) {
         return teamService.getTeamByName(teamName);
