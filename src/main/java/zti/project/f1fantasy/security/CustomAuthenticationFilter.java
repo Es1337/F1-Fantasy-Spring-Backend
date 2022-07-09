@@ -60,9 +60,16 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
+        Boolean isAdmin = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList()
+                .get(0)
+                .equals("ADMIN");
+
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", accessToken);
         tokens.put("refresh_token", refreshToken);
+        tokens.put("admin_privileges", isAdmin.toString());
 
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
