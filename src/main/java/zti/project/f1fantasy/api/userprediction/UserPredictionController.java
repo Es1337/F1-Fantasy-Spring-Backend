@@ -25,7 +25,7 @@ public class UserPredictionController {
         return userPredictionsService.getPredictionById(predictionId);
     }
 
-    @GetMapping(path = "{raceId}/{userid}")
+    @GetMapping(path = "{raceId}/{userId}")
     public List<UserPrediction> getUserPredictionsFromRaceByUserId(@PathVariable Long raceId, @PathVariable Long userId){
         return userPredictionsService.getPredictionsFromRaceFromUser(raceId, userId);
     }
