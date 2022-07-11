@@ -2,6 +2,10 @@ package zti.project.f1fantasy.api.season;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import zti.project.f1fantasy.api.ranking.Ranking;
+import zti.project.f1fantasy.api.ranking.RankingService;
+import zti.project.f1fantasy.api.user.User;
+import zti.project.f1fantasy.api.user.UserService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -9,12 +13,15 @@ import java.util.NoSuchElementException;
 @Service
 public class SeasonService {
     private final SeasonRepository seasonRepository;
-
+    private final UserService userService;
+    private final RankingService rankingService;
     private Long currentSeasonId = 1L;
 
     @Autowired
-    public SeasonService(SeasonRepository seasonRepository) {
+    public SeasonService(SeasonRepository seasonRepository, UserService userService, RankingService rankingService) {
         this.seasonRepository = seasonRepository;
+        this.userService = userService;
+        this.rankingService = rankingService;
     }
 
     public Long getCurrentSeasonId() {
@@ -47,6 +54,13 @@ public class SeasonService {
                 .max()
                 .orElseThrow(NoSuchElementException::new);
         currentSeasonId = seasonRepository.findByYear(maxYear).get(0).getId();
+
+        List<User> users = userService.getAllUsers();
+
+        for(User user : users) {
+            Ranking newRanking = new Ranking();
+            rankingService.addRanking(newRanking, user.getId(), season.getId());
+        }
 
         return seasonRepository.save(season);
     }
