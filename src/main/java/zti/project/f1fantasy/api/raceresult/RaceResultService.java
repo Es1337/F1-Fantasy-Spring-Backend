@@ -46,6 +46,9 @@ public class RaceResultService {
         Driver driver = driverService.getDriverById(driverId);
         Race race = raceService.getRaceById(raceId);
 
+        driver.setPoints( driver.getPoints() + result.getPoints() );
+        driver.getTeam().setPoints( driver.getTeam().getPoints() + result.getPoints() );
+
         result.setDriver(driver);
         result.setRace(race);
 
@@ -68,6 +71,12 @@ public class RaceResultService {
 
     public void deleteResultById(Long resultId){
         RaceResult resultToDelete = raceResultRepository.findById(resultId).orElseThrow(() -> new RaceResultNotFoundException(resultId));
+
+        Driver driver = resultToDelete.getDriver();
+
+        driver.setPoints(driver.getPoints() - resultToDelete.getPoints());
+        driver.getTeam().setPoints(driver.getTeam().getPoints() - resultToDelete.getPoints());
+
         raceResultRepository.delete(resultToDelete);
     }
 }
