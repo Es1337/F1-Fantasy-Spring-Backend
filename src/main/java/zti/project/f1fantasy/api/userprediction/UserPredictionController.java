@@ -30,6 +30,11 @@ public class UserPredictionController {
         return userPredictionsService.getPredictionsFromRaceFromUser(raceId, userId);
     }
 
+    @GetMapping(path = "season/{seasonId}/{userId}")
+    public List<UserPrediction> getUserPredictionsFromSeasonByUserId(@PathVariable Long seasonId, @PathVariable Long userId){
+        return userPredictionsService.getPredictionsFromSeasonFromUser(seasonId, userId);
+    }
+
     @GetMapping(path = "{raceId}/{userId}/{avPredictionId}")
     public List<UserPrediction> getPredictionFromRaceByUserIdWithAvPredictionId(@PathVariable Long raceId,
                                                                                 @PathVariable Long userId,

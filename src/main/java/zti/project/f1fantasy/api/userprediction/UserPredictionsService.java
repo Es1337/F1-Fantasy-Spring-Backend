@@ -6,9 +6,11 @@ import zti.project.f1fantasy.api.availableprediction.AvailablePrediction;
 import zti.project.f1fantasy.api.availableprediction.AvailablePredictionService;
 import zti.project.f1fantasy.api.race.Race;
 import zti.project.f1fantasy.api.race.RaceService;
+import zti.project.f1fantasy.api.season.SeasonService;
 import zti.project.f1fantasy.api.user.User;
 import zti.project.f1fantasy.api.user.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,7 +24,7 @@ public class UserPredictionsService {
     public UserPredictionsService(UserPredictionRepository userPredictionRepository,
                                   AvailablePredictionService availablePredictionService,
                                   RaceService raceService,
-                                  UserService userService) {
+                                  UserService userService, SeasonService seasonService) {
         this.userPredictionRepository = userPredictionRepository;
         this.availablePredictionService = availablePredictionService;
         this.raceService = raceService;
@@ -50,6 +52,18 @@ public class UserPredictionsService {
 
     public List<UserPrediction> getPredictionsFromRace(Long raceId) {
         return userPredictionRepository.findByRaceId(raceId);
+    }
+
+    public List<UserPrediction> getPredictionsFromSeasonFromUser(Long seasonId, Long userId) {
+        List<UserPrediction> result = new ArrayList<>();
+
+        List<Race> racesFromSeason = raceService.getRacesFromSeason(seasonId);
+
+        for(Race race : racesFromSeason) {
+            result.addAll(userPredictionRepository.findByRaceIdAndUserId(race.getId(), userId));
+        }
+
+        return result;
     }
 
     public UserPrediction addUserPrediction(UserPrediction prediction,
