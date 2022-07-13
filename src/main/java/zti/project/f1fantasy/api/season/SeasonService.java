@@ -3,9 +3,9 @@ package zti.project.f1fantasy.api.season;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zti.project.f1fantasy.api.ranking.Ranking;
-import zti.project.f1fantasy.api.ranking.RankingService;
+import zti.project.f1fantasy.api.ranking.RankingRepository;
 import zti.project.f1fantasy.api.user.User;
-import zti.project.f1fantasy.api.user.UserService;
+import zti.project.f1fantasy.api.user.UserRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -13,15 +13,15 @@ import java.util.NoSuchElementException;
 @Service
 public class SeasonService {
     private final SeasonRepository seasonRepository;
-    private final UserService userService;
-    private final RankingService rankingService;
+    private final UserRepository userRepository;
+    private final RankingRepository rankingRepository;
     private Long currentSeasonId = 1L;
 
     @Autowired
-    public SeasonService(SeasonRepository seasonRepository, UserService userService, RankingService rankingService) {
+    public SeasonService(SeasonRepository seasonRepository, UserRepository userRepository, RankingRepository rankingRepository) {
         this.seasonRepository = seasonRepository;
-        this.userService = userService;
-        this.rankingService = rankingService;
+        this.userRepository = userRepository;
+        this.rankingRepository = rankingRepository;
     }
 
     public Long getCurrentSeasonId() {
@@ -55,11 +55,14 @@ public class SeasonService {
                 .orElseThrow(NoSuchElementException::new);
         currentSeasonId = seasonRepository.findByYear(maxYear).get(0).getId();
 
-        List<User> users = userService.getAllUsers();
+        List<User> users = userRepository.findAll();
 
         for(User user : users) {
             Ranking newRanking = new Ranking();
-            rankingService.addRanking(newRanking, user.getId(), season.getId());
+            newRanking.setUser(user);
+            newRanking.setSeason(season);
+
+            rankingRepository.save(newRanking);
         }
 
         return seasonRepository.save(season);
